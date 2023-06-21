@@ -1,0 +1,123 @@
+html
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Directory Listing</title>
+	<style>
+		ul {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			display: flex;
+			flex-wrap: wrap;
+		}
+
+		li {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			width: 150px;
+			height: 150px;
+			margin: 10px;
+			text-align: center;
+			font-size: 16px;
+		}
+
+		li img {
+			width: 80px;
+			height: 80px;
+			margin-bottom: 10px;
+		}
+
+		li a {
+			text-decoration: none;
+			color: #333;
+			word-wrap: break-word;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-wrap: wrap;
+			max-width: 20ch;
+		}
+
+		.upload-btn {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			position: fixed;
+			bottom: 20px;
+			right: 20px;
+			width: 60px;
+			height: 60px;
+			background-image: url("upload-btn.png");
+			background-size: cover;
+			color: #fff;
+			border-radius: 50%;
+			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+			cursor: pointer;
+			transition: all 0.3s ease-in-out;
+		}
+
+		.upload-btn:hover {
+			transform: scale(1.1);
+			box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+		}
+
+		.upload-btn i {
+			font-size: 24px;
+			margin-bottom: 5px;
+		}
+
+		.upload-btn span {
+			font-size: 12px;
+			text-align: center;
+			max-width: 60px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.file-input {
+			display: none;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>Directory Listing for {{dirPath}}</h1>
+	<ul>
+		{{#entities}}
+		<li>
+			{{#isDirectory}}
+			<img src="folder-icon.png" alt="Folder Icon">
+			{{/isDirectory}}
+			<a href="{{url}}">{{name}}</a>
+		</li>
+		{{/entities}}
+	</ul>
+	<label for="fileInput" class="upload-btn">
+		<i class="material-icons"></i>
+		<span>Upload</span>
+	</label>
+	<input type="file" id="fileInput" class="file-input" onchange="uploadFile()">
+	<script>
+		function uploadFile() {
+			const fileInput = document.getElementById('fileInput');
+			const file = fileInput.files[0];
+			const xhr = new XMLHttpRequest();
+			xhr.open('POST', '/upload');
+			xhr.setRequestHeader('Content-Type', file.type);
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState === 4 && xhr.status === 200) {
+					window.location.reload();
+				}
+			};
+			xhr.send(file);
+		}
+	</script>
+</body>
+
+</html>
