@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_foreground_plugin/flutter_foreground_plugin.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../service/http_server.dart';
 import '../model/settings.dart';
@@ -14,11 +13,12 @@ void startForegroundService() async {
   await FlutterForegroundPlugin.setServiceMethod(startHttpServer);
   await FlutterForegroundPlugin.startForegroundService(
     holdWakeLock: false,
-    // onStarted: () {
-
-    // },
+    onStarted: () {
+      debugPrint("FlutterForegroundPlugin.onStarted");
+    },
     onStopped: () {
       _httpServer?.stop();
+      _httpServer = null;
     },
     title: "Http File Server",
     content: "",
@@ -27,10 +27,12 @@ void startForegroundService() async {
 }
 
 void startHttpServer() {
-  Settings settings = Settings();
-  settings.load();
-  _httpServer = MyHttpServer(settings);
-  _httpServer!.start();
+  if (_httpServer == null) {
+    Settings settings = Settings();
+    settings.load();
+    _httpServer = MyHttpServer(settings);
+    _httpServer!.start();
+  }
 }
 
 class HomePage extends StatefulWidget {

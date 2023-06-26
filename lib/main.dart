@@ -11,7 +11,6 @@ void main() async {
   await Permission.notification.request();
 
   runApp(const MyApp());
-  // startForegroundService();
 }
 
 class MyApp extends StatelessWidget {

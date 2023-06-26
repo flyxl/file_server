@@ -23,7 +23,7 @@ class MyHttpServer {
       _settings.port,
       shared: true,
     );
-    log('Server running on port ${_settings.port}, server $_server');
+    log('Server running on port ${_settings.port}');
     await _server.forEach((request) {
       _handleRequest(request);
     });
@@ -40,7 +40,6 @@ class MyHttpServer {
   void _handleRequest(HttpRequest request) async {
     String path = request.uri.path;
     String absolutePath = _settings.rootDirectory + path;
-    log('path: $path, absolutePath: $absolutePath');
 
     if (request.method == 'PUT') {
       log('handle PUT request');
