@@ -49,9 +49,11 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    Permission.storage
-        .request()
-        .then((_) => _settings.load())
+    // Permission.storage
+    //     .request()
+    //     .then((_) => _settings.load())
+    _settings
+        .load()
         .then((value) => Utils.getIpAddress())
         .then((value) => setState(() => _ipAddress = value));
   }
