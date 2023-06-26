@@ -1,18 +1,45 @@
 import 'dart:developer';
-import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 
-import 'package:file_server/settings_dialog.dart';
 import 'package:file_server/http_server.dart';
 import 'package:file_server/settings.dart';
+import 'package:file_server/settings_dialog.dart';
 import 'package:file_server/utils.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_foreground_plugin/flutter_foreground_plugin.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+MyHttpServer? _httpServer;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Permission.storage.request();
   await Permission.manageExternalStorage.request();
+
   runApp(const MyApp());
+  startForegroundService();
 }
+
+void startForegroundService() async {
+  await FlutterForegroundPlugin.setServiceMethodInterval(seconds: 5);
+  await FlutterForegroundPlugin.setServiceMethod(startHttpServer);
+  await FlutterForegroundPlugin.startForegroundService(
+    holdWakeLock: false,
+    onStarted: () {
+      Settings settings = Settings();
+      settings.load();
+      _httpServer = MyHttpServer(settings);
+      _httpServer!.start();
+    },
+    onStopped: () {
+      _httpServer?.stop();
+    },
+    title: "Http File Server",
+    content: "",
+    iconName: "ic_launcher",
+  );
+}
+
+void startHttpServer() {}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -38,7 +65,7 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   final Settings _settings = Settings();
-  MyHttpServer? _httpServer;
+
   bool _isServerRunning = false;
   String? _ipAddress;
 
@@ -53,16 +80,14 @@ class HomePageState extends State<HomePage> {
   }
 
   void _startServer() {
-    log('$_settings');
-    _httpServer = MyHttpServer(_settings);
-    _httpServer!.start();
+    startForegroundService();
     setState(() {
       _isServerRunning = true;
     });
   }
 
   void _stopServer() {
-    _httpServer!.stop();
+    FlutterForegroundPlugin.stopForegroundService();
     setState(() {
       _isServerRunning = false;
     });

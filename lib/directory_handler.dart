@@ -17,9 +17,9 @@ Future<String> generateDirectoryHtml(
       await rootBundle.loadString('assets/directory_template.html');
   final templateEntities = entities.map((entity) {
     String name = entity.path.split('/').last;
-    if (name.length > 18) {
-      name = '${name.substring(0, 18)}...';
-    }
+    // if (name.length > 18) {
+    //   name = '${name.substring(0, 18)}...';
+    // }
     final isDirectory = FileSystemEntity.isDirectorySync(entity.path);
     final encodedName = Uri.encodeComponent(name);
     return {

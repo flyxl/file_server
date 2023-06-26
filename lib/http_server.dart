@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:file_server/directory_handler.dart';
 import 'package:file_server/file_handler.dart';
 import 'package:file_server/settings.dart';
-import 'package:flutter/services.dart';
-import 'package:mime/mime.dart';
+import 'package:file_server/upload_handler.dart';
 
 const staticResources = [
   '/folder-icon.png',
+  '/file-icon.png',
   '/upload-btn.png',
 ];
 
@@ -21,11 +21,15 @@ class MyHttpServer {
     _server = await HttpServer.bind(
       InternetAddress.anyIPv4,
       _settings.port,
+      shared: true,
     );
-    log('Server running on port ${_settings.port}');
-    await for (HttpRequest request in _server) {
+    log('Server running on port ${_settings.port}, server $_server');
+    await _server.forEach((request) {
       _handleRequest(request);
-    }
+    });
+    // await for (HttpRequest request in _server) {
+    //   _handleRequest(request);
+    // }
   }
 
   void stop() {
@@ -37,13 +41,12 @@ class MyHttpServer {
     String path = request.uri.path;
     String absolutePath = _settings.rootDirectory + path;
     log('path: $path, absolutePath: $absolutePath');
-    if (staticResources.contains(path)) {
-      ByteData data = await rootBundle.load('assets$path');
-      List<int> bytes = data.buffer.asUint8List();
-      String mimeType = lookupMimeType(path) ?? 'image/png';
-      request.response.headers.set('Content-Type', mimeType);
-      request.response.add(bytes);
-      await request.response.close();
+
+    if (request.method == 'PUT') {
+      log('handle PUT request');
+      handleUploadRequest(request, absolutePath);
+    } else if (staticResources.contains(path)) {
+      handleStaticResourceRequest(request, path);
     } else if (FileSystemEntity.isFileSync(absolutePath)) {
       handleFileRequest(request, absolutePath);
     } else if (FileSystemEntity.isDirectorySync(absolutePath)) {

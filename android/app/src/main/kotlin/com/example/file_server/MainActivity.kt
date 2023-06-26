@@ -1,4 +1,4 @@
-package com.example.file_server
+package com.tbeasy.fileserver
 
 import io.flutter.embedding.android.FlutterActivity
 
