@@ -1,9 +1,9 @@
 import 'dart:developer';
 import 'dart:io';
-import 'package:file_server/directory_handler.dart';
-import 'package:file_server/file_handler.dart';
-import 'package:file_server/settings.dart';
-import 'package:file_server/upload_handler.dart';
+import 'package:file_server/service/directory_handler.dart';
+import 'package:file_server/service/file_handler.dart';
+import 'package:file_server/model/settings.dart';
+import 'package:file_server/service/upload_handler.dart';
 
 const staticResources = [
   '/folder-icon.png',

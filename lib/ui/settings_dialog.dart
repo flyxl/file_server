@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:file_server/settings.dart';
+import 'package:file_server/model/settings.dart';
 
 class SettingsDialog extends StatefulWidget {
   final Settings settings;
