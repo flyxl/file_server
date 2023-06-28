@@ -2,19 +2,18 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:mustache_template/mustache_template.dart';
 
-void handleDirectoryRequest(HttpRequest request, String dirPath) async {
+void handleDirectoryRequest(
+    HttpRequest request, String dirPath, String template) async {
   Directory dir = Directory(dirPath);
   List<FileSystemEntity> entities = dir.listSync();
-  final html = await generateDirectoryHtml(entities, dir.path);
+  final html = await generateDirectoryHtml(entities, dir.path, template);
   request.response.headers.set('Content-Type', 'text/html; charset=utf-8');
   request.response.write(html);
   request.response.close();
 }
 
 Future<String> generateDirectoryHtml(
-    List<FileSystemEntity> entities, String dirPath) async {
-  final template =
-      await rootBundle.loadString('assets/directory_template.html');
+    List<FileSystemEntity> entities, String dirPath, String template) async {
   final templateEntities = entities.map((entity) {
     String name = entity.path.split('/').last;
     // if (name.length > 18) {

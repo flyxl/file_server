@@ -6,6 +6,7 @@ import 'ui/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Permission.storage.request();
   await Permission.manageExternalStorage.request();
   await Permission.notification.request();

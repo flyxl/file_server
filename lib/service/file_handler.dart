@@ -13,9 +13,9 @@ void handleFileRequest(HttpRequest request, String filePath) async {
   });
 }
 
-void handleStaticResourceRequest(HttpRequest request, String path) async {
-  ByteData data = await rootBundle.load('assets$path');
-  List<int> bytes = data.buffer.asUint8List();
+void handleStaticResourceRequest(HttpRequest request, String path,
+    Map<String, List<int>> staticResources) async {
+  final bytes = staticResources[path]!;
   String mimeType = lookupMimeType(path) ?? 'image/png';
   request.response.headers.set('Content-Type', mimeType);
   request.response.add(bytes);
