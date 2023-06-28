@@ -1,16 +1,14 @@
-# file_server
+本项目是一个使用Flutter实现的支持Android平台的轻量级Http文件管理器,基于Dart和Flutter,支持浏览、下载和上传文件。
 
-A new Flutter project.
+##主要功能
+浏览服务器文件和文件夹
+下载服务器文件
+上传文件到服务器
+使用
+获取代码
+```
+git clone https://github.com/flyxl/file_server.git
+```
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+LICENSE
+项目采用MIT许可证,详情见LICENSE文件。
