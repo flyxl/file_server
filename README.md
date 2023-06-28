@@ -1,4 +1,4 @@
-本项目是一个使用Flutter实现的支持Android平台的轻量级Http文件管理器,基于Dart和Flutter,支持浏览、下载和上传文件。
+本项目是一个使用Flutter实现的支持Android平台的轻量级Http文件管理器，基于Dart和Flutter，支持浏览、下载和上传文件。
 
 ##主要功能
 浏览服务器文件和文件夹
